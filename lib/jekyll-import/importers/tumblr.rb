@@ -18,6 +18,7 @@ module JekyllImport
         c.option 'url', '--url URL', 'Tumblr URL'
         c.option 'format', '--format FORMAT', 'Output format (default: "html")'
         c.option 'grab_images', '--grab_images', 'Whether to grab images (default: false)'
+        c.option 'image_class', '--image_class', 'Add this class to <img> tags (default: "tumblr-photo")'
         c.option 'add_highlights', '--add_highlights', 'Whether to add highlights (default: false)'
         c.option 'rewrite_urls', '--rewrite_urls', 'Whether to rewrite URLs (default: false)'
       end
@@ -26,10 +27,12 @@ module JekyllImport
         url            = options.fetch('url')
         format         = options.fetch('format', "html")
         grab_images    = options.fetch('grab_images', false)
+        image_class    = options.fetch('image_class', "tumblr-photo")
         add_highlights = options.fetch('add_highlights', false)
         rewrite_urls   = options.fetch('rewrite_urls', false)
 
         @grab_images = grab_images
+        @image_class = image_class
         FileUtils.mkdir_p "_posts/tumblr"
         url += "/api/read/json/"
         per_page = 50
@@ -197,7 +200,7 @@ module JekyllImport
           url = post["photo-url"] || post["photo-url-#{size}"]
           next if url.nil?
           begin
-            return "<img src=\"#{save_photo(url, ext)}\"/>"
+            return "<img class=\"#{@image_class}\" src=\"#{save_photo(url, ext)}\"/>"
           rescue OpenURI::HTTPError => err
             puts "Failed to grab photo"
           end
