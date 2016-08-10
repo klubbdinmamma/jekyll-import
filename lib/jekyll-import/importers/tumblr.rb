@@ -169,6 +169,7 @@ module JekyllImport
           :name => "#{date}-#{slug}.#{format}",
           :header => {
             "layout" => "post",
+            "type" => post['type'],
             "title" => title,
             "date" => Time.parse(post['date']).xmlschema,
             "tags" => (post["tags"] or []),
