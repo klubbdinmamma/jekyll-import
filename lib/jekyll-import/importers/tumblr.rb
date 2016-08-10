@@ -195,6 +195,7 @@ module JekyllImport
 
         sizes.each do |size|
           url = post["photo-url"] || post["photo-url-#{size}"]
+          next if size == 1280
           next if url.nil?
           begin
             return "<img src=\"#{save_photo(url, ext)}\"/>"
